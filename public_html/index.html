@@ -21,9 +21,9 @@
                 <h3 align="center">AngularJS Tutorial - Make Autocomplete Textbox</h3>  
                 <div ng-app="myapp" ng-controller="usercontroller">  
                      <label>Enter Country Name</label>  
-                     <input type="text" name="country" id="country" ng-model="country" ng-keyup="complete(country)" class="form-control" />  
+                     <input type="text" ng-model="city" ng-keyup="complete(city)" class="form-control" />  
                      <ul class="list-group" ng-model="hidethis" ng-hide="hidethis">  
-                          <li class="list-group-item" ng-repeat="countrydata in filterCountry" ng-click="fillTextbox(countrydata)">{{countrydata}}</li>  
+                          <li class="list-group-item" ng-repeat="city in filteredCities" ng-click="fillTextbox(city)">{{city}}</li>  
                      </ul>  
                 </div>  
            </div>  
@@ -34,7 +34,7 @@
                 var app = angular.module("myapp",[]);  
                 
                 app.controller("usercontroller", function($scope){  
-                $scope.countryList = [
+                $scope.cities = [
                     "Аксаковщина д. Минская обл., Минский р-н, Горанский с/с",
                     "Андреевщина д. Витебская обл., Оршанский р-н, Андреевщинский с/с",
                     "Антоновка д. Гомельская обл., Калинковичский р-н, Горбовичский с/с",
@@ -554,16 +554,16 @@
                      $scope.complete = function(string){  
                           $scope.hidethis = false;  
                           var output = [];  
-                          angular.forEach($scope.countryList, function(country){  
-                               if(country.toLowerCase().indexOf(string.toLowerCase()) >= 0)  
+                          angular.forEach($scope.cities, function(city){  
+                               if(city.toLowerCase().indexOf(string.toLowerCase()) >= 0)  
                                {  
-                                    output.push(country);  
+                                    output.push(city);  
                                }  
                           });  
-                          $scope.filterCountry = output;  
+                          $scope.filteredCities = output;  
                      }  
-                     $scope.fillTextbox = function(string){  
-                          $scope.country = string;  
+                     $scope.fillTextbox = function(city){  
+                          $scope.country = city;  
                           $scope.hidethis = true;  
                      }  
                 });  
