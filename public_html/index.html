@@ -33,9 +33,9 @@
            <script>  
                 var app = angular.module("myapp",[]);  
                 
-                app.controller("usercontroller", function($scope){  
-                $scope.cities = [
-                    "Аксаковщина д. Минская обл., Минский р-н, Горанский с/с",
+                var citiesData = app.service('citiesData', function (){
+                    this.cities = [
+                        "Аксаковщина д. Минская обл., Минский р-н, Горанский с/с",
                     "Андреевщина д. Витебская обл., Оршанский р-н, Андреевщинский с/с",
                     "Антоновка д. Гомельская обл., Калинковичский р-н, Горбовичский с/с",
                     "Антоново д. Брестская обл., Барановичский р-н, Колпеницкий с/с",
@@ -550,7 +550,11 @@
                     "Янтарный п. Гомельская обл., Гомельский р-н, Поколюбичский с/с",
                     "Ярково д. Минская обл., Минский р-н, Ждановичский с/с",
                     "Ясный Лес д. Могилевская обл., Бобруйский р-н, Химовский с/с"
-                    ]
+                    ];
+                });
+                
+                app.controller("usercontroller", function($scope, citiesData){  
+                $scope.cities = citiesData.cities;
                      $scope.complete = function(string){  
                           $scope.hidethis = false;  
                           var output = [];  
