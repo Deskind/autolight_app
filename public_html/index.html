@@ -28,7 +28,7 @@
            <div class="container" style="width:500px;">  
                 <h3 align="center">Расчет стоимости доставки</h3> 
                 <!--Destination points-->
-                <div>
+                <div id="destinationPointsContainer">
                     <!--Destination from-->
                     <div id="from">
                         <label>Везем из:</label>  
@@ -49,6 +49,7 @@
                     <!--Destionation to end-->
                 </div>
                 <!--Destination points end-->
+                
                 <!--Delivery type selector-->
                 <div class="row">
                     <div class="col-md-5">
@@ -61,23 +62,23 @@
                     </div>
                 </div>
                 <!--Delivery type selector end-->
+                
                 <br>
-                <!--Number of places-->
-                <div>
-                    <label for="numberOfPlaces">Количество мест</label>
-                    <input id="numberOfPlaces">
-                </div>
-                <!--Number of places-->
-                <br>
-                <!--Weight input section-->
+                <!--Document weight input section-->
                 <div  ng-show="isDocuments">
-                    <label for="parcelWeight">Вес:</label>
-                    <input type="text" id="parcelWeigth" ng-model="parcelWeight">
+                    <label for="documentParcelWeigth">Вес:</label>
+                    <input type="text" id="documentParcelWeigth">
                 </div>
-                <!--Weight input section end-->
+                <!--document weight input section end-->
+                
                 <br>
                 <div ng-show="isCargo">
+                    <div>
+                        <label for="cargoParcelWeight">Вес:</label>
+                        <input id="cargoParcelWeight"/>
+                    </div>
                     <!--Height parcel section-->
+                    <br>
                     <div>
                         <label for="parcelHeight">Высота, см:</label>
                         <input id="parcelHeight">
@@ -99,7 +100,6 @@
                     <!--Depth parcel section and-->
                 </div>
                 <br>
-                <p id="p">Parcel weight: {{parcelWeight}}</p>
            </div>  
            
            
@@ -678,7 +678,7 @@
                     $scope.isCargo = false;
                     };
                     $scope.cargoDeliverySelected = function (){
-                        $scope.isDocuments = true;
+                        $scope.isDocuments = false;
                         $scope.isCargo = true;
                     };
                     
@@ -688,20 +688,32 @@
             
             <!--jquery script-->
             <script>
-                $('#parcelWeigth').spinner({
+                var callDialog = function(){
+                    alert('dialog');
+                };    
+                $('#documentParcelWeigth').spinner({
+                    min: 0,
+                    max: 30,
+                    step: 0.5,
+                    spin: function( event, ui ) {
+                        var val = $(this).val();
+                        if(val > 2){
+                            callDialog();    
+                        }
+                    }
+                });
+                
+                $('#cargoParcelWeight').spinner({
                     min: 0,
                     max: 30,
                     step: 0.5
                 });
+                
                 $('#parcelHeight, #parcelWidth, #parcelDepth').spinner({
                     min: 0,
                     step: 10
                 });
                 
-                $('#numberOfPlaces').spinner({
-                    min: 1,
-                    step: 1
-                });
                 
             </script>
             <!--jquery script end-->
