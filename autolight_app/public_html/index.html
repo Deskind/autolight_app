@@ -35,10 +35,29 @@
                         </ul>  
                     </div>
                 </div>
-                <div id="deliveryType">
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn" ng-click="documentsDeliverySelected()" ng-class="{'btn-primary': isDocuments, 'btn-default': !isDocuments}">Документы</button>
-                        <button type="button" class="btn" ng-click="cargoDeliverySelected()" ng-class="{'btn-primary': isCargo, 'btn-default': !isCargo}">Груз</button>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div id="deliveryType">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn" ng-click="documentsDeliverySelected()" ng-class="{'btn-primary': isDocuments, 'btn-default': !isDocuments}">Документы</button>
+                                <button type="button" class="btn" ng-click="cargoDeliverySelected()" ng-class="{'btn-primary': isCargo, 'btn-default': !isCargo}">Груз</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button" ng-click="weightUp(deliveryWeight)">+</button>
+                            </span>
+                            <input type="text" class="form-control" aria-describedby="basic-addon2" ng-model="deliveryWeight">
+                            <span class="input-group-addon" id="basic-addon2">кг</span>
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button" ng-click="weightDown(deliveryWeight)">-</button>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 
@@ -589,6 +608,7 @@
                 
                 app.controller("usercontroller", function($scope, citiesData){  
                     $scope.cities = citiesData.cities;
+                    $scope.deliveryWeight = 1.1;
                     $scope.complete = function(string, destination){ 
                         if(destination === 'from'){
                             $scope.hideFromDestination = false;  
@@ -621,6 +641,12 @@
                     $scope.cargoDeliverySelected = function (){
                         $scope.isDocuments = false;
                         $scope.isCargo = true;
+                    };
+                    $scope.weightUp = function(weight){
+                        $scope.deliveryWeight = ((weight*10)+1)/10;
+                    };
+                    $scope.weightDown = function(weight){
+                        $scope.deliveryWeight = ((weight*10)-1)/10;
                     };
                 });  
             </script> 
