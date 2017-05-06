@@ -26,8 +26,10 @@
       <body ng-app="myapp" ng-controller="usercontroller">  
            <br /><br />  
            <div class="container" style="width:500px;">  
-                <h3 align="center">Расчет стоимости доставки</h3>  
+                <h3 align="center">Расчет стоимости доставки</h3> 
+                <!--Destination points-->
                 <div>
+                    <!--Destination from-->
                     <div id="from">
                         <label>Везем из:</label>  
                         <input type="text" ng-model="cityFrom" ng-keyup="complete(cityFrom, 'from')" class="form-control" />  
@@ -35,6 +37,8 @@
                              <li class="list-group-item" ng-repeat="city in filteredCities" ng-click="fillCityFrom(city)">{{city}}</li>  
                         </ul>  
                     </div>
+                    <!--Destination from end-->
+                    <!--Destination to--> 
                     <div id="to">
                         <label>Везем в:</label>  
                         <input type="text" ng-model="cityTo" ng-keyup="complete(cityTo, 'to')" class="form-control" />  
@@ -42,7 +46,9 @@
                              <li class="list-group-item" ng-repeat="city in filteredCities" ng-click="fillCityTo(city)">{{city}}</li>  
                         </ul>  
                     </div>
+                    <!--Destionation to end-->
                 </div>
+                <!--Destination points end-->
                 <!--Delivery type selector-->
                 <div class="row">
                     <div class="col-md-5">
@@ -64,34 +70,36 @@
                 <!--Number of places-->
                 <br>
                 <!--Weight input section-->
-                <div>
+                <div  ng-show="isDocuments">
                     <label for="parcelWeight">Вес:</label>
-                    <input id="parcelWeigth">
+                    <input type="text" id="parcelWeigth" ng-model="parcelWeight">
                 </div>
                 <!--Weight input section end-->
                 <br>
-                <!--Height parcel section-->
-                <div>
-                    <label for="parcelHeight">Высота, см:</label>
-                    <input id="parcelHeight">
+                <div ng-show="isCargo">
+                    <!--Height parcel section-->
+                    <div>
+                        <label for="parcelHeight">Высота, см:</label>
+                        <input id="parcelHeight">
+                    </div>
+                    <!--Height parcel section end-->
+                    <br>
+                    <!--Width parcel section-->
+                    <div>
+                        <label for="parcelWidth">Ширина, см:</label>
+                        <input id="parcelWidth">
+                    </div>
+                    <!--Width parcel section end-->
+                    <br>
+                    <!--Depth parcel section--> 
+                    <div>
+                        <label for="parcelDepth">Глубина, см:</label>
+                        <input id="parcelDepth">
+                    </div>
+                    <!--Depth parcel section and-->
                 </div>
-                <!--Height parcel section end-->
                 <br>
-                <!--Width parcel section-->
-                <div>
-                    <label for="parcelWidth">Ширина, см:</label>
-                    <input id="parcelWidth">
-                </div>
-                <!--Width parcel section end-->
-                <br>
-                <!--Depth parcel section--> 
-                <div>
-                    <label for="parcelDepth">Глубина, см:</label>
-                    <input id="parcelDepth">
-                </div>
-                <!--Depth parcel section and-->
-                <br>
-                
+                <p id="p">Parcel weight: {{parcelWeight}}</p>
            </div>  
            
            
@@ -670,7 +678,7 @@
                     $scope.isCargo = false;
                     };
                     $scope.cargoDeliverySelected = function (){
-                        $scope.isDocuments = false;
+                        $scope.isDocuments = true;
                         $scope.isCargo = true;
                     };
                     
@@ -694,6 +702,7 @@
                     min: 1,
                     step: 1
                 });
+                
             </script>
             <!--jquery script end-->
       </body>  
