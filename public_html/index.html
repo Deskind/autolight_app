@@ -2,9 +2,17 @@
  <html>  
       <head>  
            <meta charset="UTF-8"> 
-           <title>Webslesson Tutorial | AngularJS Tutorial - Make Autocomplete Textbox</title>  
+           <title>Autolight</title>  
+           <!--Bootstrap stuff-->
            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
+           <!--Angular stuff-->
            <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>  
+           <!--jquery stuff-->
+           <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+            <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+            <script src="jquery.mousewheel.min.js"></script>
+           
            <style>  
            li{  
                 cursor:pointer;  
@@ -15,21 +23,79 @@
            }  
            </style>  
       </head>  
-      <body>  
+      <body ng-app="myapp" ng-controller="usercontroller">  
            <br /><br />  
            <div class="container" style="width:500px;">  
-                <h3 align="center">AngularJS Tutorial - Make Autocomplete Textbox</h3>  
-                <div ng-app="myapp" ng-controller="usercontroller">  
-                     <label>Enter Country Name</label>  
-                     <input type="text" ng-model="city" ng-keyup="complete(city)" class="form-control" />  
-                     <ul class="list-group" ng-model="hidethis" ng-hide="hidethis">  
-                          <li class="list-group-item" ng-repeat="city in filteredCities" ng-click="fillTextbox(city)">{{city}}</li>  
-                     </ul>  
-                </div>  
+                <h3 align="center">Расчет стоимости доставки</h3>  
+                <div>
+                    <div id="from">
+                        <label>Везем из:</label>  
+                        <input type="text" ng-model="cityFrom" ng-keyup="complete(cityFrom, 'from')" class="form-control" />  
+                        <ul class="list-group" ng-model="hideFromDestination" ng-hide="hideFromDestination">  
+                             <li class="list-group-item" ng-repeat="city in filteredCities" ng-click="fillCityFrom(city)">{{city}}</li>  
+                        </ul>  
+                    </div>
+                    <div id="to">
+                        <label>Везем в:</label>  
+                        <input type="text" ng-model="cityTo" ng-keyup="complete(cityTo, 'to')" class="form-control" />  
+                        <ul class="list-group" ng-model="hideToDestination" ng-hide="hideToDestination">  
+                             <li class="list-group-item" ng-repeat="city in filteredCities" ng-click="fillCityTo(city)">{{city}}</li>  
+                        </ul>  
+                    </div>
+                </div>
+                <!--Delivery type selector-->
+                <div class="row">
+                    <div class="col-md-5">
+                        <div id="deliveryType">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn" ng-click="documentsDeliverySelected()" ng-class="{'btn-primary': isDocuments, 'btn-default': !isDocuments}">Документы</button>
+                                <button type="button" class="btn" ng-click="cargoDeliverySelected()" ng-class="{'btn-primary': isCargo, 'btn-default': !isCargo}">Груз</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Delivery type selector end-->
+                <br>
+                <!--Number of places-->
+                <div>
+                    <label for="numberOfPlaces">Количество мест</label>
+                    <input id="numberOfPlaces">
+                </div>
+                <!--Number of places-->
+                <br>
+                <!--Weight input section-->
+                <div>
+                    <label for="parcelWeight">Вес:</label>
+                    <input id="parcelWeigth">
+                </div>
+                <!--Weight input section end-->
+                <br>
+                <!--Height parcel section-->
+                <div>
+                    <label for="parcelHeight">Высота, см:</label>
+                    <input id="parcelHeight">
+                </div>
+                <!--Height parcel section end-->
+                <br>
+                <!--Width parcel section-->
+                <div>
+                    <label for="parcelWidth">Ширина, см:</label>
+                    <input id="parcelWidth">
+                </div>
+                <!--Width parcel section end-->
+                <br>
+                <!--Depth parcel section--> 
+                <div>
+                    <label for="parcelDepth">Глубина, см:</label>
+                    <input id="parcelDepth">
+                </div>
+                <!--Depth parcel section and-->
+                <br>
+                
            </div>  
            
            
-           
+           <!--Angular script-->
            <script>  
                 var app = angular.module("myapp",[]);  
                 
@@ -553,25 +619,82 @@
                     ];
                 });
                 
+                var deliveryPrices = app.service('deliveryPrices', function(){
+                    this.devliveryDocumentsPrice =[
+                        /*1*/{local: 4.00, global: 5.00, weightLow: 0, weight: 1},
+                        /*2*/{local: 4.50, global: 6.00, weightLow: 1, weight: 2}
+                    ];
+                    this.deliveryCargoPrice = [
+                        /*1*/{local: 6.00, global: 8.00, weightLow: 0, weight: 1},
+                        /*2*/{local: 7.00, global: 9.00, weightLow: 1, weight: 2},
+                        /*3*/{local: 7.50, global: 10.00, weightLow: 2, weight: 3},
+                        /*4*/{local: 8.00, global: 12.00, weightLow: 3, weight: 5},
+                        /*5*/{local: 8.50, global: 14.00, weightLow: 5, weight: 10},
+                        /*6*/{local: 9.00, global: 16.00, weightLow: 10, weight: 15},
+                        /*7*/{local: 10.00, global: 18.00, weightLow: 15, weight: 20},
+                        /*8*/{local: 11.50, global: 20.00, weightLow: 20, weight: 25},
+                        /*9*/{local: 12.50, global: 22.00, weightLow: 25, weight: 30}
+                    ]; 
+                });
+                
                 app.controller("usercontroller", function($scope, citiesData){  
-                $scope.cities = citiesData.cities;
-                     $scope.complete = function(string){  
-                          $scope.hidethis = false;  
-                          var output = [];  
-                          angular.forEach($scope.cities, function(city){  
-                               if(city.toLowerCase().indexOf(string.toLowerCase()) >= 0)  
-                               {  
-                                    output.push(city);  
-                               }  
-                          });  
-                          $scope.filteredCities = output;  
-                     }  
-                     $scope.fillTextbox = function(city){  
-                          $scope.country = city;  
-                          $scope.hidethis = true;  
-                     }  
+                    $scope.cities = citiesData.cities;
+                    $scope.deliveryWeight = 1.1;
+                    $scope.complete = function(string, destination){ 
+                        if(destination === 'from'){
+                            $scope.hideFromDestination = false;  
+                            $scope.hideToDestination = true;
+                        }else if(destination === 'to'){
+                            $scope.hideFromDestination = true;  
+                            $scope.hideToDestination = false;
+                        }
+                        var output = [];  
+                        angular.forEach($scope.cities, function(city){  
+                             if(city.toLowerCase().startsWith(string.toLowerCase()) === true)  
+                             {  
+                                  output.push(city);  
+                             }  
+                        });  
+                        $scope.filteredCities = output;  
+                    };  
+                    $scope.fillCityFrom = function(city){  
+                          $scope.cityFrom = city;  
+                          $scope.hideFromDestination = true;  
+                    };
+                    $scope.fillCityTo = function(city){  
+                          $scope.cityTo = city;  
+                          $scope.hideToDestination = true;  
+                    }; 
+                    $scope.documentsDeliverySelected = function (){
+                    $scope.isDocuments = true;
+                    $scope.isCargo = false;
+                    };
+                    $scope.cargoDeliverySelected = function (){
+                        $scope.isDocuments = false;
+                        $scope.isCargo = true;
+                    };
+                    
                 });  
- </script> 
+            </script> 
+            <!--Angular script end-->
+            
+            <!--jquery script-->
+            <script>
+                $('#parcelWeigth').spinner({
+                    min: 0,
+                    max: 30,
+                    step: 0.5
+                });
+                $('#parcelHeight, #parcelWidth, #parcelDepth').spinner({
+                    min: 0,
+                    step: 10
+                });
+                
+                $('#numberOfPlaces').spinner({
+                    min: 1,
+                    step: 1
+                });
+            </script>
+            <!--jquery script end-->
       </body>  
- </html>  
- 
+</html> 
