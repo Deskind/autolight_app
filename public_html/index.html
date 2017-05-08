@@ -12,47 +12,61 @@
             <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
             <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
             <script src="jquery.mousewheel.min.js"></script>
-           
-           <style>  
-           li{  
-                cursor:pointer;  
-           }  
-           li:hover  
-           {  
-                background-color:#f9f9f9;  
-           }  
+            <!--My own JS-->
+            <script src="js/calculator.js"></script>
+           <style> 
+                body { 
+                    background-image: url(img/squared_metal.png); /* Путь к фоновому рисунку */
+                    background-position: left bottom; /* Положение фона */
+                    background-repeat: repeat; /* Повторяем фон по горизонтали */
+               }
+               ul{
+                   
+               }
+                li{  
+                    cursor:pointer;  
+                }  
+                li:hover  
+                {  
+                     background-color:#f9f9f9;  
+                }  
+                #resultCost{
+                    color: red;
+                    font-size: 20px;
+                }
            </style>  
       </head>  
-      <body ng-app="myapp" ng-controller="usercontroller">  
+      <body id="body" ng-app="myapp" ng-controller="usercontroller">  
            <br /><br />  
            <div class="container" style="width:500px;">  
                 <h3 align="center">Расчет стоимости доставки</h3> 
                 <!--Destination points-->
-                <div id="destinationPointsContainer">
-                    <!--Destination from-->
-                    <div id="from">
-                        <label>Везем из:</label>  
-                        <input type="text" ng-model="cityFrom" ng-keyup="complete(cityFrom, 'from')" class="form-control" />  
+                <!--Destination from-->
+                <div class="row">
+                    <div class="col-md-12" id="from">
+                        <label for="cityFromInput">Везем из:</label>  
+                        <input id="cityFromInput" type="text" ng-model="cityFrom" ng-keyup="complete(cityFrom, 'from')" class="form-control" />  
                         <ul class="list-group" ng-model="hideFromDestination" ng-hide="hideFromDestination">  
                              <li class="list-group-item" ng-repeat="city in filteredCities" ng-click="fillCityFrom(city)">{{city}}</li>  
                         </ul>  
                     </div>
-                    <!--Destination from end-->
-                    <!--Destination to--> 
-                    <div id="to">
-                        <label>Везем в:</label>  
-                        <input type="text" ng-model="cityTo" ng-keyup="complete(cityTo, 'to')" class="form-control" />  
+                </div>
+                <!--Destination from end-->
+                <!--Destination to--> 
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-12" id="to">
+                        <label for="cityToInput">Везем в:</label>  
+                        <input id="cityToInput" type="text" ng-model="cityTo" ng-keyup="complete(cityTo, 'to')" class="form-control" />  
                         <ul class="list-group" ng-model="hideToDestination" ng-hide="hideToDestination">  
                              <li class="list-group-item" ng-repeat="city in filteredCities" ng-click="fillCityTo(city)">{{city}}</li>  
                         </ul>  
                     </div>
-                    <!--Destionation to end-->
                 </div>
+                <!--Destionation to end-->
                 <!--Destination points end-->
-                
                 <!--Delivery type selector-->
                 <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-12">
                         <div id="deliveryType">
                             <div class="btn-group" role="group">
                                 <button type="button" class="btn" ng-click="documentsDeliverySelected()" ng-class="{'btn-primary': isDocuments, 'btn-default': !isDocuments}">Документы</button>
@@ -65,40 +79,48 @@
                 
                 <br>
                 <!--Document weight input section-->
-                <div  ng-show="isDocuments">
-                    <label for="documentParcelWeigth">Вес:</label>
-                    <input type="text" id="documentParcelWeigth">
-                </div>
+                <form  name="documentsForm" ng-show="isDocuments">
+                    <div>
+                        <label for="documentParcelWeigth">Вес,кг:</label>
+                        <input type="text" id="documentParcelWeigth" name="value">
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-default" onclick="submitDocumentsForm()">Рассчитать</button>
+                </form>
                 <!--document weight input section end-->
                 
                 <br>
-                <div ng-show="isCargo">
+                <form name="cargoForm" ng-show="isCargo">
                     <div>
-                        <label for="cargoParcelWeight">Вес:</label>
-                        <input id="cargoParcelWeight"/>
+                        <label for="cargoParcelWeight">Вес,кг:</label>
+                        <input id="cargoParcelWeight" required/>
                     </div>
                     <!--Height parcel section-->
                     <br>
                     <div>
                         <label for="parcelHeight">Высота, см:</label>
-                        <input id="parcelHeight">
+                        <input id="parcelHeight" required>
                     </div>
                     <!--Height parcel section end-->
                     <br>
                     <!--Width parcel section-->
                     <div>
                         <label for="parcelWidth">Ширина, см:</label>
-                        <input id="parcelWidth">
+                        <input id="parcelWidth" required>
                     </div>
                     <!--Width parcel section end-->
                     <br>
                     <!--Depth parcel section--> 
                     <div>
-                        <label for="parcelDepth">Глубина, см:</label>
-                        <input id="parcelDepth">
+                        <label for="parcelDepth">Длина, см:</label>
+                        <input id="parcelDepth" required>
                     </div>
-                    <!--Depth parcel section and-->
-                </div>
+                    <!--Depth parcel section end-->
+                     <br>
+                    <button type="submit" class="btn btn-default">Рассчитать</button>
+                </form>
+                <p id="resultCost" ng-show="isDocuments"></p>
+
                 <br>
            </div>  
            
@@ -648,6 +670,8 @@
                 app.controller("usercontroller", function($scope, citiesData){  
                     $scope.cities = citiesData.cities;
                     $scope.deliveryWeight = 1.1;
+                    $scope.isDocuments = false;
+                    $scope.isCargo = false;
                     $scope.complete = function(string, destination){ 
                         if(destination === 'from'){
                             $scope.hideFromDestination = false;  
@@ -688,9 +712,16 @@
             
             <!--jquery script-->
             <script>
+                /**the function will call if documents weight greater than 2 kg*/
                 var callDialog = function(){
-                    alert('dialog');
+                    var confirmResult = window.confirm('Вложение документов весом более 2х кг считается товарным вложением.');
+                    if(confirmResult){
+                        angular.element(document.getElementById('body')).scope().cargoDeliverySelected();
+                        angular.element(document.getElementById('body')).scope().$apply();
+                    }
+                    $('#documentParcelWeigth').val('Hello bro');
                 };    
+                
                 $('#documentParcelWeigth').spinner({
                     min: 0,
                     max: 30,
@@ -698,7 +729,7 @@
                     spin: function( event, ui ) {
                         var val = $(this).val();
                         if(val > 2){
-                            callDialog();    
+                            callDialog();
                         }
                     }
                 });
@@ -709,13 +740,23 @@
                     step: 0.5
                 });
                 
-                $('#parcelHeight, #parcelWidth, #parcelDepth').spinner({
+                $('#parcelHeight, #parcelWidth').spinner({
                     min: 0,
                     step: 10
                 });
                 
-                
+                $('#parcelDepth').spinner({
+                    min: 0,
+                    max: 1.5,
+                    step: 0.1
+                });
             </script>
             <!--jquery script end-->
+            
+            <!--Regular JS-->
+            <script>
+                
+            </script>
+            <!--End of JS-->
       </body>  
 </html> 
