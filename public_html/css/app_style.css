@@ -1,0 +1,19 @@
+body { 
+/*    background-image: url(../img/squared_metal.png);  Путь к фоновому рисунку 
+    background-position: left bottom;  Положение фона 
+    background-repeat: repeat;  Повторяем фон по горизонтали */
+}
+ul{
+
+}
+li{  
+    cursor:pointer;  
+}  
+li:hover  
+{  
+     background-color:#f9f9f9;  
+}  
+#resultCostForDocuments, #resultCostForCargo{
+    color: red;
+    font-size: 20px;
+}
