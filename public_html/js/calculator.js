@@ -51,10 +51,10 @@ var submitDocumentsForm = function (prices){
             $('#resultCostForDocuments').text("Стоимость доставки:  " +price.global+" р.");
         }else if(cityFrom===cityTo && !isInList){
             price = weightRange(docsWeight, prices);
-            $('#resultCostForDocuments').text("Стоимость доставки:  " +(price.local+8.40)+" р.");
+            $('#resultCostForDocuments').text("Стоимость доставки:  " +(parseFloat(price.local)+8.40)+" р.");
         }else if(cityFrom !== cityTo && !isInList){
             price = weightRange(docsWeight, prices);
-            $('#resultCostForDocuments').text("Стоимость доставки:  " +(price.global+8.40)+" р.");
+            $('#resultCostForDocuments').text("Стоимость доставки:  " +(parseFloat(price.global)+8.40)+" р.");
         }
     }   
 };
@@ -101,10 +101,10 @@ var submitCargoForm = function (prices){
             $('#resultCostForCargo').text("Стоимость доставки:  " +price.global+" р.");
         }else if(cityFrom===cityTo && !isInList){
             price = weightRange(weight, prices);
-            $('#resultCostForCargo').text("Стоимость доставки:  " +(price.local+8.40)+" р.");
+            $('#resultCostForCargo').text("Стоимость доставки:  " +(parseFloat(price.local)+8.40)+" р.");
         }else if(cityFrom !== cityTo && !isInList){
             price = weightRange(weight, prices);
-            $('#resultCostForCargo').text("Стоимость доставки:  " +(price.global+8.40)+" р.");
+            $('#resultCostForCargo').text("Стоимость доставки:  " +(parseFloat(price.global)+8.40)+" р.");
         }
     }
 };
